@@ -1,13 +1,16 @@
 require "spec_helper"
 
 describe PdfScrap::Command::Pdftotext do
-  example "exist command" do
-    expect(described_class.path).to be_include(described_class::COMMAND)
+  let(:pdf) { File.join(PdfScrap::ROOT, "spec/sample/sample.pdf") }
+  let(:command) { described_class.new }
+  
+  describe ".path" do
+    example "exist command" do
+      expect(described_class.path).to be_include(described_class::COMMAND)
+    end
   end
   
-  example ".new"
-  
-  let(:command) { described_class.new }
+  describe ".new"
   
   describe "#[param]=value" do
     example "update raw parameter" do
@@ -32,7 +35,7 @@ describe PdfScrap::Command::Pdftotext do
         command.y1 = @y1
         command.x2 = @x2
         command.y2 = @y2
-        command.pdf = File.join(PdfScrap::ROOT, "spec/sample/sample.pdf")
+        command.pdf = pdf
       end
       
       example "normalized command" do
@@ -40,7 +43,7 @@ describe PdfScrap::Command::Pdftotext do
         expect(built).to match(/-y #{@y1}/)
         expect(built).to match(/-W #{@x2 - @x1}/)
         expect(built).to match(/-H #{@y2 - @y1}/)
-        expect(built).to match(/sample\.pdf$/)
+        expect(built).to match(/sample\.pdf\"/)
       end
       
       context "specify width" do
@@ -63,5 +66,42 @@ describe PdfScrap::Command::Pdftotext do
       
     end # context "specify params"
   end # describe "#build"
-  describe "#exec"
+  
+  describe "#execute" do
+    let(:result) { command.execute }
+    before(:each) do
+      command.pdf = pdf
+      
+      @lines = 12
+      
+      @x = 50
+      @y = 36
+      @w = 120
+      @h = 32
+      
+      @step = 31
+    end
+    
+    example "convert to text" do
+      expect(result).to be_a(String)
+    end
+    
+    example "block given" do
+      texts = []
+      
+      command.execute do |com|
+        (1.. @lines).each do |m|
+          com.x1 = @x
+          com.y1 = @y
+          com.x2 = @x + @w
+          com.y2 = @y + @h
+          
+          texts << com.text
+          
+          @y += @step
+        end
+      end
+      expect(texts.size).to be @lines
+    end
+  end
 end

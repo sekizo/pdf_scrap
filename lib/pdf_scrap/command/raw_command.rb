@@ -47,6 +47,10 @@ module PdfScrap
         command
       end
       
+      def execute(*args, &block)
+        raise MethodNotImplementedError
+      end
+      
       def rect=(value)
         value = [value].flatten
         self.x1 = value.shift
