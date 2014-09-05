@@ -20,6 +20,21 @@ describe PdfScrap::Command::Pdftotext do
     end
   end
   
+  describe "#region=" do
+    before(:each) do
+      @x, @y, @w, @h = 50, 100, 10, 20
+      
+      command.region = [@x, @y, @w, @h]
+    end
+    
+    example "update region" do
+      expect(command[:x]).to be @x
+      expect(command[:y]).to be @y
+      expect(command[:W]).to be @w
+      expect(command[:H]).to be @h
+    end
+  end
+  
   describe "#build" do
     let(:built) { command.build }
     

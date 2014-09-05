@@ -38,6 +38,14 @@ class PdfScrap::Command::Pdftotext < PdfScrap::Command::RawCommand
     self.execute!(*args)
   end
   
+  def region=(value)
+    value = [value].flatten
+    self[:x] = value.shift
+    self[:y] = value.shift
+    self[:W] = value.shift
+    self[:H] = value.shift
+  end
+  
   def x1=(value)
     self[:x] = value
   end
