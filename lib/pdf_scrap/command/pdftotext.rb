@@ -28,7 +28,7 @@ class PdfScrap::Command::Pdftotext < PdfScrap::Command::RawCommand
     
     result = File.open(export_path, "r") do |f|
       f.read
-    end
+    end.sub(/\f$/, "")
     
     FileUtils.rm_f(export_path)
     result

@@ -101,6 +101,7 @@ describe PdfScrap::Command::Pdftotext do
           @y += @step
         end
       end
+      
       expect(texts.size).to be @lines
     end
   end
