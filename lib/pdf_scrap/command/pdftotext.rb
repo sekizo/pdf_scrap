@@ -4,6 +4,7 @@ require "pdf_scrap/command/raw_command"
 class PdfScrap::Command::Pdftotext < PdfScrap::Command::RawCommand
   COMMAND = "pdftotext"
   TMP_DIR = ".tmp"
+  PWD = `pwd`.gsub(/\n/, "")
   
   def build
     command = [super]
@@ -85,7 +86,7 @@ class PdfScrap::Command::Pdftotext < PdfScrap::Command::RawCommand
   private
     
     def pwd
-      File.dirname(File.expand_path(__FILE__))
+      PWD
     end
     
     def tmp_dir
